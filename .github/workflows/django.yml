@@ -7,11 +7,13 @@ jobs:
     strategy:
       matrix:
         pyversion: ['3.5','3.8']
+        postgresversion: ['postgres:10.8','postgres:12']
+
     runs-on: ubuntu-latest
 
     services:
       postgres:
-        image: postgres:10.8
+        image: ${{matrix.postgresversion}}
         env:
           POSTGRES_USER: decide
           POSTGRES_PASSWORD: complexpassword
