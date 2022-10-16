@@ -1,3 +1,4 @@
+from calendar import c
 import random
 import itertools
 from django.utils import timezone
@@ -208,3 +209,26 @@ class VotingTestCase(BaseTestCase):
         response = self.client.put('/voting/{}/'.format(voting.pk), data, format='json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), 'Voting already tallied')
+
+    def test_Voting_toString(self):
+        v = self.create_voting()
+        self.assertEquals(str(v),"test voting")
+        self.assertEquals(str(v.question),"test question")
+        self.assertEquals(str(v.question.options.all()[0]),"option 1 (2)")
+
+    def test_ejercicio1(self):
+        question = Question(desc = "Question ejercicio 1")
+        question.save()
+
+        for i in range(2):
+            option = QuestionOption(question=question,option="option {}".format(i+1))
+            option.save()
+
+        v = Voting(name="voting ejercicio 1",question=question)
+        v.save()
+
+        auth,_ = Auth.objects.get_or_create(url=settings.BASEURL, defaults={'me': True, 'name': 'test auth'})
+        auth.save()
+        v.auths.add(auth)
+
+        return v
