@@ -232,3 +232,17 @@ class VotingTestCase(BaseTestCase):
         v.auths.add(auth)
 
         return v
+
+
+class ViewTestExercises(BaseTestCase):
+    def test_ejercicio1_vistas(self):
+        self.login()
+
+        data = {
+            'name':'Test voting number ionno',
+            'desc':'Why do you say I am copying?',
+            'question': 'Where do you live?',
+            'question_opt': ['yes','no']
+        }
+        response = self.client.post('/voting/',data,format='json')
+        self.assertEqual(response.status_code,201)
